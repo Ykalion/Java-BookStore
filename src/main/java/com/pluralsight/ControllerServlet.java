@@ -49,19 +49,22 @@ public class ControllerServlet extends HttpServlet {
 		String action = request.getPathInfo();
 
 		try {
-			switch(action) {
+			switch (action) {
 				case "/admin":
-					 showBookAdmin(request, response);
-           break;
-			  case "/new":
+					showBookAdmin(request, response);
+					break;
+				case "/new":
 					showNewForm(request, response);
-          break;
+					break;
 				case "/insert":
 					insertBook(request, response);
-          break;
-        default:
-				   listBooks(request, response);
-           break;
+					break;
+				case "/delete":
+					deleteBook(request, response);
+					break;
+				default:
+					listBooks(request, response);
+					break;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -102,6 +105,12 @@ public class ControllerServlet extends HttpServlet {
 		Book newBook = new Book(title, author, Float.parseFloat(priceString));
 
 		bookDAO.insertBook(newBook);
+		response.sendRedirect("list");
+	}
+
+	private void deleteBook(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		final int bookId = Integer.parseInt(request.getParameter("id"));
+		this.bookDAO.deleteBook(bookId);
 		response.sendRedirect("list");
 	}
 
